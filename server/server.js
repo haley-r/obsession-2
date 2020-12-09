@@ -23,8 +23,6 @@ app.get('/', (req, res) => {
 wss.on('connection', function (ws) {
     console.log('websocket connected');
     ws.on('message', function (data) {
-        console.log('message!');
-        
         // log whats being sent from a single client to the server
         console.log('data being sent to server: ', data);
         // send that out to all clients, except the current one
@@ -33,6 +31,12 @@ wss.on('connection', function (ws) {
                 client.send(JSON.stringify({ type: 'confirmation-info-received' }));
             }
         })
+
+        // do different things based on kind of message!
+
+        //if its creating a room, add to room array and send back current room to ws
+    
+        //if its joining a room, check for room array and send back current room to ws
 
 
 

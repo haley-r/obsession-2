@@ -9,8 +9,6 @@ import { GameContextProvider } from '../../gameContext'
 
 const URL = 'ws://localhost:5005/websocket'
 
-const UserContext = React.createContext();
-
 function App() {
   const ws = new WebSocket(URL)
   const [currentRoom, setCurrentRoom] = useState();
@@ -29,6 +27,7 @@ function App() {
       const message = JSON.parse(event.data)
       // then do something with the message
       console.log('message received in App.js is: ', message);
+      setCurrentRoom('SET')
       // this.addMessage(message)
     }
     ws.onclose = () => {

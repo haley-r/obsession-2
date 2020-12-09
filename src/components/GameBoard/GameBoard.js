@@ -8,7 +8,7 @@ function Game() {
     // who is this player? or that in app?
 
     return (
-        <div class="GameBoard">
+        <div className="GameBoard">
             <h2>Game Board Component</h2>
         </div>
     );

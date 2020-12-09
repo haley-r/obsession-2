@@ -16,7 +16,7 @@ function Game() {
         try {
             ws.send(JSON.stringify({
                 roomName: input,
-                userName: usernameInput
+                userName: usernameInput,
             }))
         } catch (error) {
             console.log('error!', error);
