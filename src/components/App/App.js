@@ -1,14 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 // import './App.css';
 
 import HomeScreen from '../HomeScreen/HomeScreen';
+import GameBoard from '../GameBoard/GameBoard';
 
 const URL = 'ws://localhost:5005/websocket'
 
-
 function App() {
-
   const ws = new WebSocket(URL)
+  const [currentRoom, setCurrentRoom] = useState();
 
   useEffect(() => {
     ws.onopen = () => {
@@ -34,13 +34,13 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Obsession</h1>
-      </header>
-      {/* <Game /> */}
-
-
-      <HomeScreen />
+      <h1>Obsession</h1>
+      {!currentRoom &&
+        <HomeScreen />
+      }
+      {currentRoom &&
+        <GameBoard />
+      }
     </div>
   );
 }

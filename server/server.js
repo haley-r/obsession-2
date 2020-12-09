@@ -23,12 +23,20 @@ app.get('/', (req, res) => {
 wss.on('connection', function (ws) {
     console.log('websocket connected');
     ws.on('message', function (data) {
+        console.log('message!');
+        
         // log whats being sent from a single client to the server
         console.log('data being sent to server: ', data);
-        // send that out to all clients
-        if (client.readyState === WebSocket.OPEN) {
-            client.send(data);
-        }
+        // send that out to all clients, except the current one
+        wss.clients.forEach(function each(client) {
+            if (client !== ws && client.readyState === WebSocket.OPEN) {
+                client.send(JSON.stringify({ type: 'confirmation-info-received' }));
+            }
+        })
+
+
+
+
     })
 })
 
