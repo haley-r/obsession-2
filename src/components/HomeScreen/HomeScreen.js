@@ -7,6 +7,7 @@ const URL = 'ws://localhost:5005/websocket'
 function Game() {
     const [createRoomInput, setCreateRoomInput] = useState("");
     const [joinRoomInput, setJoinRoomInput] = useState("");
+    const [usernameInput, setUsernameInput] = useState("");
 
     const ws = new WebSocket(URL)
 
@@ -15,6 +16,7 @@ function Game() {
         try {
             ws.send(JSON.stringify({
                 roomName: input,
+                userName: usernameInput
             }))
         } catch (error) {
             console.log('error!', error);
@@ -26,6 +28,7 @@ function Game() {
         try {
             ws.send(JSON.stringify({
                 roomName: input,
+                userName: usernameInput
             }))
         } catch (error) {
             console.log('error!', error);
@@ -36,6 +39,10 @@ function Game() {
         <div className="HomeScreen">
             <h2>Home Screen Component</h2>
                 <div>
+                    <h3>set a username:</h3>
+                    <div>
+                        <input type="text" placeholder="your name" value={usernameInput} onChange={(event) => setUsernameInput(event.target.value)} />
+                    </div>
                     <h3>do u want to start or join a game?</h3>
                     <div>
                         <input type="text" placeholder="name your room" value={createRoomInput} onChange={(event) => setCreateRoomInput(event.target.value)} />

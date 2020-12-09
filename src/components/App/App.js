@@ -1,14 +1,23 @@
 import React, { useEffect, useState } from 'react';
 // import './App.css';
 
+import Header from '../Header/Header';
 import HomeScreen from '../HomeScreen/HomeScreen';
 import GameBoard from '../GameBoard/GameBoard';
 
+import { GameContextProvider } from '../../gameContext'
+
 const URL = 'ws://localhost:5005/websocket'
+
+const UserContext = React.createContext();
 
 function App() {
   const ws = new WebSocket(URL)
   const [currentRoom, setCurrentRoom] = useState();
+
+  const gameState = {
+    currentRoom,
+  }
 
   useEffect(() => {
     ws.onopen = () => {
@@ -34,13 +43,15 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Obsession</h1>
-      {!currentRoom &&
-        <HomeScreen />
-      }
-      {currentRoom &&
-        <GameBoard />
-      }
+        <GameContextProvider value={gameState}>
+          <Header />
+          {!currentRoom &&
+            <HomeScreen />
+          }
+          {currentRoom &&
+            <GameBoard />
+          }
+      </GameContextProvider>
     </div>
   );
 }
