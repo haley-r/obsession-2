@@ -7,10 +7,10 @@ import GameBoard from '../GameBoard/GameBoard';
 
 import { GameContextProvider } from '../../gameContext'
 
-const URL = 'ws://localhost:5005/websocket'
+const URL = 'ws://localhost:5005/game-websocket'
 
 function App() {
-  const ws = new WebSocket(URL)
+  const server = new WebSocket(URL)
   const [currentRoom, setCurrentRoom] = useState();
 
   const gameState = {
@@ -18,11 +18,11 @@ function App() {
   }
 
   useEffect(() => {
-    ws.onopen = () => {
+    server.onopen = () => {
       // on connecting, do nothing but log it to the console
-      console.log('ws connected in App.js')
+      console.log('ws server connected in App.js')
     }
-    ws.onmessage = event => {
+    server.onmessage = (event) => {
       // on receiving a message, update things based on whats in the message
       const message = JSON.parse(event.data)
       // then do something with the message
@@ -30,7 +30,7 @@ function App() {
       setCurrentRoom('SET')
       // this.addMessage(message)
     }
-    ws.onclose = () => {
+    server.onclose = () => {
       console.log('disconnected')
       // automatically try to reconnect on connection loss
       // obviously would need to rewrite for funcitonal component, so do that later

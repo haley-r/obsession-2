@@ -2,14 +2,11 @@
 const WebSocket = require('ws')
 const express = require('express')
 const app = express()
-
-// serve static files?
+// serve static files
 app.use(express.static('build'));
-
 // heroku would be PORT ENV ?
 const server = app.listen(5005)
-
-// rather than listen to a certain port, wait for upgrade opportunity?
+// rather than listen to a certain port, wait for upgrade opportunity
 const wss = new WebSocket.Server({
     noServer: true,
 })
@@ -22,10 +19,55 @@ app.get('/', (req, res) => {
 
 wss.on('connection', function (ws) {
     console.log('websocket connected');
+    // ws.info = {
+    //     connected: true,
+    //     user: ''
+    // }
+
+    // console.log('ws.info is: ', ws);
+    // console.log('wss.clients is: ', wss);
+
+
     ws.on('message', function (data) {
         // log whats being sent from a single client to the server
         console.log('data being sent to server: ', data);
+        // const { userName, action, roomName } = JSON.parse(data);
+        // console.log('username: ', userName);
+        
+        try {
+            switch (action) {
+                case 'CREATE': {
+                    console.log('in create case in server. now wat?');
+
+                    // console.log('rooms: ', rooms);
+
+                    // ws.info.user = userName;
+                    // rooms.push(roomName)
+                    // updateRoomList()
+
+                    break
+                }
+                case 'JOIN': {
+                    console.log('in join case in server. now wat?');
+                    break
+                }
+                case 'NEWUSER': {
+                    console.log('in new user, now do something');
+                    // ws.info.user = data.userName
+                    // allClients.push(ws)
+                    // updateAllUsers()
+                    break
+                }
+            }
+
+        } catch (error) {
+            // not expected
+        }
+
+
+
         // send that out to all clients, except the current one
+        
         wss.clients.forEach(function each(client) {
             if (client !== ws && client.readyState === WebSocket.OPEN) {
                 client.send(JSON.stringify({ type: 'confirmation-info-received' }));
@@ -33,13 +75,8 @@ wss.on('connection', function (ws) {
         })
 
         // do different things based on kind of message!
-
-        //if its creating a room, add to room array and send back current room to ws
-    
+        //if its creating a room, add to room array and send back current room to w
         //if its joining a room, check for room array and send back current room to ws
-
-
-
 
     })
 })
