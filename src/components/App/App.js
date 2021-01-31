@@ -1,56 +1,93 @@
 import React, { useEffect, useState } from 'react';
 // import './App.css';
 
-import Header from '../Header/Header';
-import HomeScreen from '../HomeScreen/HomeScreen';
-import GameBoard from '../GameBoard/GameBoard';
+// import Header from '../Header/Header';
+// import HomeScreen from '../HomeScreen/HomeScreen';
+// import GameBoard from '../GameBoard/GameBoard';
 
-import { GameContextProvider } from '../../gameContext'
+// import { GameContextProvider } from '../../gameContext'
 
 const URL = 'ws://localhost:5005/game-websocket'
 
 function App() {
-  const server = new WebSocket(URL)
+
+  // so these are like the local variables? I think? 
+  const [client, setClient] = useState(new WebSocket(URL))
   const [currentRoom, setCurrentRoom] = useState();
 
-  const gameState = {
-    currentRoom,
+
+  const [createRoomInput, setCreateRoomInput] = useState("");
+  const [joinRoomInput, setJoinRoomInput] = useState("");
+  const [usernameInput, setUsernameInput] = useState("");
+
+
+  
+  const createRoom = () => {
+    console.log('in createRoom');
+  }
+
+  const joinRoom = () => {
+    console.log('in joinRoom');
+  }
+
+  const makeUser = (event, input) => {
+    event.preventDefault();
+    console.log('in makeUser with input: ', input);
+    try {
+      client.send(JSON.stringify({
+        userName: input,
+        action: "NEWUSER"
+      }))
+    } catch (error) {
+      console.log('error!', error);
+    }
   }
 
   useEffect(() => {
-    server.onopen = () => {
-      // on connecting, do nothing but log it to the console
-      console.log('ws server connected in App.js')
+    client.onopen = () => {
+      console.log('ws client connected in App.js')
     }
-    server.onmessage = (event) => {
-      // on receiving a message, update things based on whats in the message
-      const message = JSON.parse(event.data)
-      // then do something with the message
-      console.log('message received in App.js is: ', message);
-      setCurrentRoom('SET')
-      // this.addMessage(message)
+    client.onmessage = (event) => {
+      console.log('message received in App.js is: ', event.data);
     }
-    server.onclose = () => {
+    client.onclose = () => {
       console.log('disconnected')
-      // automatically try to reconnect on connection loss
-      // obviously would need to rewrite for funcitonal component, so do that later
-      // this.setState({
-      //     ws: new WebSocket(URL),
-      // })
+      setClient(new WebSocket(URL))  // automatically try to reconnect
     }
   });
 
   return (
     <div className="App">
-        <GameContextProvider value={gameState}>
-          <Header />
+        <div className="Header">
+          <h2>Obsession</h2>
+          <p>User Name: </p>
+          <p>Room Name:</p>
+        </div>
+
+        <div className="HomeScreen">
+          <h2>Home Screen Component</h2>
+              <div>
+                <input type="text" placeholder="enter username" value={usernameInput} onChange={(event) => setUsernameInput(event.target.value)} />
+                <button onClick={(event) => makeUser(event, usernameInput)}>set username</button>
+              </div>
+              <div>
+                <input type="text" placeholder="name your room" value={createRoomInput} onChange={(event) => setCreateRoomInput(event.target.value)} />
+                <button onClick={() => createRoom(createRoomInput)}>create room</button>
+              </div>
+              <div>
+                <input type="text" placeholder="enter existing room name" value={joinRoomInput} onChange={(event) => setJoinRoomInput(event.target.value)} />
+                <button onClick={() => joinRoom(joinRoomInput)}>join room</button>
+              </div>
+        </div>
+
+
+          {/* <Header/>
           {!currentRoom &&
             <HomeScreen />
           }
           {currentRoom &&
             <GameBoard />
-          }
-      </GameContextProvider>
+          } */}
     </div>
   );
 }

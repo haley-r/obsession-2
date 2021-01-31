@@ -9,7 +9,7 @@ function Game() {
     const [joinRoomInput, setJoinRoomInput] = useState("");
     const [usernameInput, setUsernameInput] = useState("");
 
-    const ws = new WebSocket(URL)
+    // const ws = new WebSocket(URL)
 
     const createRoom = (infoObject) => {
         
@@ -39,6 +39,7 @@ function Game() {
     }
 
     const makeUser =(event, input)=>{
+        event.preventDefault();
         console.log('in makeUser with input: ', input);
         try {
             ws.send(JSON.stringify({

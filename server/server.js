@@ -31,11 +31,13 @@ wss.on('connection', function (ws) {
     ws.on('message', function (data) {
         // log whats being sent from a single client to the server
         console.log('data being sent to server: ', data);
+        parsedData = JSON.parse(data);
+        console.log('data is:', parsedData)
         // const { userName, action, roomName } = JSON.parse(data);
         // console.log('username: ', userName);
         
         try {
-            switch (action) {
+            switch (parsedData.action) {
                 case 'CREATE': {
                     console.log('in create case in server. now wat?');
 
@@ -86,3 +88,19 @@ server.on('upgrade', async function upgrade(request, socket, head) {
         wss.emit('connection', ws, request)
     })
 })
+
+
+// this code is from the bitlab example
+// const WebSocket = require('ws');
+
+// const wss = new WebSocket.Server({ port: 3030 });
+
+// wss.on('connection', function connection(ws) {
+//     ws.on('message', function incoming(data) {
+//         wss.clients.forEach(function each(client) {
+//             if (client !== ws && client.readyState === WebSocket.OPEN) {
+//                 client.send(data);
+//             }
+//         });
+//     });
+// });
