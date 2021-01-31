@@ -21,7 +21,7 @@ function App() {
   const [usernameInput, setUsernameInput] = useState("");
 
 
-  
+
   const createRoom = () => {
     console.log('in createRoom');
   }
@@ -43,7 +43,21 @@ function App() {
     }
   }
 
+
+    // client.onopen = () => {
+    //   console.log('ws client connected in App.js')
+    // }
+    // client.onmessage = (event) => {
+    //   console.log('message received in App.js is: ', event.data);
+    // }
+    // client.onclose = () => {
+    //   console.log('disconnected')
+    //   setClient(new WebSocket(URL))  // automatically try to reconnect
+    // }
+
   useEffect(() => {
+    console.log('useEffect is being called');
+    
     client.onopen = () => {
       console.log('ws client connected in App.js')
     }
@@ -54,20 +68,24 @@ function App() {
       console.log('disconnected')
       setClient(new WebSocket(URL))  // automatically try to reconnect
     }
-  });
+  }, []);//note the []!!!! is important! it is second arg
+  // the array lists state values that have to change in order for
+  // *this* useEffect to process on re-renders
 
   return (
     <div className="App">
         <div className="Header">
-          <h2>Obsession</h2>
-          <p>User Name: </p>
-          <p>Room Name:</p>
+          <h2>Obsession Header</h2>
+          <p>I want to figure out how to give this component access to what color are u, what room are you in, is it your turn</p>
+          {/* <p>User Name: </p>
+          <p>Room Name:</p> */}
         </div>
 
         <div className="HomeScreen">
           <h2>Home Screen Component</h2>
-              <div>
-                <input type="text" placeholder="enter username" value={usernameInput} onChange={(event) => setUsernameInput(event.target.value)} />
+              {/* <div>
+                <input type="text" placeholder="enter username" value={usernameInput} 
+                        onChange={(event) => setUsernameInput(event.target.value)} />
                 <button onClick={(event) => makeUser(event, usernameInput)}>set username</button>
               </div>
               <div>
@@ -77,7 +95,7 @@ function App() {
               <div>
                 <input type="text" placeholder="enter existing room name" value={joinRoomInput} onChange={(event) => setJoinRoomInput(event.target.value)} />
                 <button onClick={() => joinRoom(joinRoomInput)}>join room</button>
-              </div>
+              </div> */}
         </div>
 
 
@@ -88,6 +106,8 @@ function App() {
           {currentRoom &&
             <GameBoard />
           } */}
+
+      <p>idea: first step is create or join room, display something unique (board) for that room</p>
     </div>
   );
 }

@@ -11,6 +11,13 @@ const wss = new WebSocket.Server({
     noServer: true,
 })
 
+
+
+// let board = null ----- I think this is like what room would be
+// const players = { 'red': null, 'yellow': null }
+// let player = 'red'
+
+
 // template for get request
 app.get('/', (req, res) => {
     console.log('in basic GET' );
@@ -18,13 +25,15 @@ app.get('/', (req, res) => {
 })
 
 wss.on('connection', function (ws) {
-    console.log('websocket connected');
+    console.log('websocket connected at ', Date.now());
     // ws.info = {
     //     connected: true,
     //     user: ''
     // }
+    // ws.info = { username: "does this stick?"}
 
-    // console.log('ws.info is: ', ws);
+    console.log('ws.info is: ', ws.info);
+
     // console.log('wss.clients is: ', wss);
 
 
@@ -55,7 +64,11 @@ wss.on('connection', function (ws) {
                 }
                 case 'NEWUSER': {
                     console.log('in new user, now do something');
-                    // ws.info.user = data.userName
+                    //probably just like, save the name to the websocket?
+                    //does the user have a game property? or do games have two users?
+                    //echo back or push the name??
+                    ws.info.username = parsedData.username;
+
                     // allClients.push(ws)
                     // updateAllUsers()
                     break

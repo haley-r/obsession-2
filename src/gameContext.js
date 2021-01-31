@@ -7,3 +7,9 @@ const GameContext = React.createContext({})
 export const GameContextProvider = GameContext.Provider
 
 export default GameContext
+
+
+
+// things to keep in store:
+// player (client) status- in a room or nah?
+// state of the game board (all the game boards?)
